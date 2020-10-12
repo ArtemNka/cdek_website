@@ -16,7 +16,7 @@ class NotebookAdmin(admin.ModelAdmin):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
- class SmartphoneCategoryChoiceField(forms.ModelChoiceField):
+class SmartphoneCategoryChoiceField(forms.ModelChoiceField):
         pass
 
 class SmartphoneAdmin(admin.ModelAdmin):

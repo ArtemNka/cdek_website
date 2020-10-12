@@ -39,7 +39,7 @@ class Notebook(Product):
     time_without_charge = models.CharField(max_length=255, verbose_name='Время работы аккумулятора')
 
     def __str__(self):
-        return "{} : {}".format(self.category_name, self.title) #??
+        return f"{self.category_name} : {self.title}"
 
 
 class Smartphone(models.Model):
@@ -54,7 +54,7 @@ class Smartphone(models.Model):
     frontal_cam_mp = models.CharField(max_length=255, verbose_name='Фронтальная камера')
 
     def __str__(self):
-        return "{} : {}".format(self.category_name, self.title) # ??
+        return f"{self.category_name} : {self.title}" 
 
 
 class CartProduct(models.Model):
@@ -86,4 +86,4 @@ class Customer(models.Model):
     address = models.CharField(verbose_name='Адрес', max_length=255)
 
     def __str__(self):
-        return "Покупатель: {} {}".format(self.user.last_name)  # ??????
+        return f"Покупатель: {self.user.last_name} {self.user.last_name}"
