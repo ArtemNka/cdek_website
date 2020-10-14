@@ -39,10 +39,10 @@ class Notebook(Product):
     time_without_charge = models.CharField(max_length=255, verbose_name='Время работы аккумулятора')
 
     def __str__(self):
-        return f"{self.category_name} : {self.title}"
+        return "{} : {}".format(self.category.name, self.title)
 
 
-class Smartphone(models.Model):
+class Smartphone(Product):
     diagonal = models.CharField(max_length=255, verbose_name='Диагональ')
     display_type = models.CharField(max_length=255, verbose_name='Тип дисплея')
     resolution = models.CharField(max_length=255, verbose_name='Разрешение')
@@ -54,7 +54,7 @@ class Smartphone(models.Model):
     frontal_cam_mp = models.CharField(max_length=255, verbose_name='Фронтальная камера')
 
     def __str__(self):
-        return f"{self.category_name} : {self.title}" 
+        return "{} : {}".format(self.category.name, self.title)
 
 
 class CartProduct(models.Model):
@@ -77,7 +77,7 @@ class Cart(models.Model):
     final_price = models.DecimalField(max_digits=9, decimal_places=2, verbose_name='Общая цена')
 
     def __str__(self):
-        return str(self.id)
+        return str(self.id)#???
 
 
 class Customer(models.Model):
@@ -87,3 +87,31 @@ class Customer(models.Model):
 
     def __str__(self):
         return f"Покупатель: {self.user.last_name} {self.user.last_name}"
+
+
+class LatestProductsManager:
+
+    @staticmethod
+    def get_products_for_main_page(self, *args, **kwargs):
+        with_respect_to = kwargs.get('with_respect_to')
+
+        products = []
+        ct_models = ContentType.objects.filter(model_in=args)
+        for ct_model in ct_models:
+            model_products = ct_model.model_class()._base_manager.all().order_by('-id')[:5]
+            products.extend(model_products)
+        if with_respect_to:
+            ct_model = ContentType.objects.filter(model=with_respect_to)
+            if ct_model.exists():
+                if with_respect_to in args:
+                    return sorted(products,
+                                  key=lambda x: x.__class__._meta.model_name.startwith(with_respect_to),
+                                  reverse=True)
+
+
+        return products
+
+
+class LatestProducts:
+
+    object = LatestProductsManager()
